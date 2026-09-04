@@ -480,6 +480,72 @@ function Dashboard() {
             </Button>
           </div>
         </div>
+        {/* Sensor model */}
+        <div className="mt-6 border-t pt-5">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="label-mono flex items-center gap-2">
+              <Ruler className="size-3.5" /> Sensor model
+            </div>
+            <div className="flex flex-wrap items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Switch id="cost-aware" checked={costAware} onCheckedChange={setCostAware} />
+                <Label htmlFor="cost-aware" className="text-sm">
+                  Cost-aware ranking
+                </Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Switch id="spacing" checked={spacingOn} onCheckedChange={setSpacingOn} />
+                <Label htmlFor="spacing" className="text-sm">
+                  Enforce min. spacing
+                </Label>
+              </div>
+            </div>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="space-y-3">
+              <div className="font-mono text-xs text-tdet">TDET</div>
+              <div className="grid grid-cols-2 gap-3">
+                <NumField label="Area" unit="µm²" value={tdetArea} min={0} max={20000} step={100}
+                  title="Silicon area of one temperature detector." onChange={setTdetArea} />
+                <NumField label="Power" unit="µW" value={tdetPower} min={0} max={2000} step={10}
+                  title="Static power of one temperature detector." onChange={setTdetPower} />
+              </div>
+              <NumField label="Coverage radius" unit="µm" value={tdetRadius} min={40} max={800} step={10}
+                title="Thermal correlation length — how far a TDET reliably observes." onChange={setTdetRadius} />
+              {costAware && (
+                <NumField label="Cost weight" value={tdetCost} min={0.01} max={20} step={0.1}
+                  title="Relative cost of a TDET; greedy ranks by gain / cost." onChange={setTdetCost} />
+              )}
+            </div>
+            <div className="space-y-3">
+              <div className="font-mono text-xs text-pdet">PDET</div>
+              <div className="grid grid-cols-2 gap-3">
+                <NumField label="Area" unit="µm²" value={pdetArea} min={0} max={20000} step={100}
+                  title="Silicon area of one process detector." onChange={setPdetArea} />
+                <NumField label="Power" unit="µW" value={pdetPower} min={0} max={2000} step={10}
+                  title="Static power of one process detector." onChange={setPdetPower} />
+              </div>
+              <NumField label="Coverage radius" unit="µm" value={pdetRadius} min={40} max={800} step={10}
+                title="Process correlation length — how far a PDET reliably observes." onChange={setPdetRadius} />
+              {costAware && (
+                <NumField label="Cost weight" value={pdetCost} min={0.01} max={20} step={0.1}
+                  title="Relative cost of a PDET; greedy ranks by gain / cost." onChange={setPdetCost} />
+              )}
+            </div>
+            <div className="space-y-3 lg:col-span-2">
+              <div className="font-mono text-xs text-muted-foreground">Placement constraints</div>
+              <NumField label="Min. spacing" unit="µm" value={spacing} min={0} max={1200} step={20}
+                disabled={!spacingOn}
+                title="Minimum centre-to-centre distance between any two placed sensors."
+                onChange={setSpacing} />
+              <p className="text-xs text-muted-foreground">
+                Cost-aware ranking trades marginal observability gain against each sensor type's cost
+                weight; spacing rejects candidate sites too close to an already-placed sensor. Both
+                leave the risk and physics math untouched.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Headline metrics */}
@@ -818,6 +884,50 @@ function Dashboard() {
           </Table>
         </div>
       </section>
+    </div>
+  );
+}
+
+function NumField({
+  label,
+  unit,
+  value,
+  min,
+  max,
+  step,
+  onChange,
+  title,
+  disabled,
+}: {
+  label: string;
+  unit?: string | undefined;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  onChange: (v: number) => void;
+  title?: string | undefined;
+  disabled?: boolean | undefined;
+}) {
+  return (
+    <div title={title} className={disabled ? "opacity-40" : undefined}>
+      <div className="mb-1 flex items-center justify-between text-xs">
+        <span className="text-muted-foreground">{label}</span>
+        {unit && <span className="font-mono text-muted-foreground">{unit}</span>}
+      </div>
+      <Input
+        type="number"
+        className="h-8 font-mono text-xs tabular-nums"
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        disabled={!!disabled}
+        onChange={(e) => {
+          const v = Number(e.target.value);
+          if (Number.isFinite(v)) onChange(Math.min(max, Math.max(min, v)));
+        }}
+      />
     </div>
   );
 }
