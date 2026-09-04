@@ -918,29 +918,75 @@ function Dashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {result.sensors.map((s) => (
-                <TableRow key={s.id}>
-                  <TableCell className="tabular-nums">{s.order}</TableCell>
-                  <TableCell>
-                    <span
-                      className={
-                        s.kind === "TDET"
-                          ? "font-mono text-xs text-tdet"
-                          : "font-mono text-xs text-pdet"
-                      }
+              {result.sensors.map((s) => {
+                const open = expanded === s.id;
+                return (
+                  <Fragment key={s.id}>
+                    <TableRow
+                      className="cursor-pointer"
+                      onClick={() => setExpanded(open ? null : s.id)}
                     >
-                      {s.kind}
-                    </span>
-                  </TableCell>
-                  <TableCell className="font-mono text-xs">
-                    ({s.x.toFixed(0)}, {s.y.toFixed(0)})
-                  </TableCell>
-                  <TableCell className="text-right tabular-nums">{s.temp.toFixed(1)} °C</TableCell>
-                  <TableCell className="text-right tabular-nums">{s.proc.toFixed(2)}</TableCell>
-                  <TableCell className="text-right tabular-nums">{s.owned}</TableCell>
-                  <TableCell className="text-right tabular-nums">{s.gain.toFixed(2)}</TableCell>
-                </TableRow>
-              ))}
+                      <TableCell className="w-8">
+                        <ChevronRight
+                          className={
+                            open
+                              ? "size-4 rotate-90 transition-transform"
+                              : "size-4 transition-transform"
+                          }
+                        />
+                      </TableCell>
+                      <TableCell className="tabular-nums">{s.order}</TableCell>
+                      <TableCell>
+                        <span
+                          className={
+                            s.kind === "TDET"
+                              ? "font-mono text-xs text-tdet"
+                              : "font-mono text-xs text-pdet"
+                          }
+                        >
+                          {s.kind}
+                        </span>
+                      </TableCell>
+                      <TableCell className="font-mono text-xs">
+                        ({s.x.toFixed(0)}, {s.y.toFixed(0)})
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums">{s.temp.toFixed(1)} °C</TableCell>
+                      <TableCell className="text-right tabular-nums">{s.proc.toFixed(2)}</TableCell>
+                      <TableCell className="text-right tabular-nums">{s.owned}</TableCell>
+                      <TableCell className="text-right tabular-nums">{s.gain.toFixed(2)}</TableCell>
+                    </TableRow>
+                    {open && (
+                      <TableRow className="bg-muted/40 hover:bg-muted/40">
+                        <TableCell colSpan={8} className="py-3">
+                          <div className="grid gap-3 text-xs sm:grid-cols-2 lg:grid-cols-4">
+                            <div>
+                              <div className="label-mono">Primary block</div>
+                              <div className="mt-1 font-mono">{s.block ?? "—"}</div>
+                            </div>
+                            <div>
+                              <div className="label-mono">Near-critical paths</div>
+                              <div className="mt-1 font-mono tabular-nums">
+                                {s.nearCritical ?? 0} observed with risk ≥ 0.5
+                              </div>
+                            </div>
+                            <div>
+                              <div className="label-mono">Dominant driver</div>
+                              <div className="mt-1 font-mono capitalize">{s.driver ?? "—"}</div>
+                            </div>
+                            <div>
+                              <div className="label-mono">Marginal gain</div>
+                              <div className="mt-1 font-mono tabular-nums">
+                                {(s.gainPct ?? 0).toFixed(2)} % of total risk mass
+                                {s.cost != null && ` · cost weight ${s.cost}`}
+                              </div>
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </Fragment>
+                );
+              })}
             </TableBody>
           </Table>
         </div>
