@@ -837,6 +837,65 @@ function Dashboard() {
         </section>
       </div>
 
+      {/* Baseline comparison */}
+      <section className="panel mt-6 p-5">
+        <h2 className="flex items-center gap-2 text-lg font-semibold">
+          <Scale className="size-4 text-primary" /> Greedy vs naive baselines
+        </h2>
+        <p className="mb-3 text-sm text-muted-foreground">
+          Identical TDET/PDET counts placed greedily, uniformly, and at random — scored with exactly
+          the same risk and physics math.
+        </p>
+        <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart
+              data={comparison.map((c) => ({
+                strategy: c.strategy,
+                coverage: Number((c.coverage * 100).toFixed(2)),
+                critical: Number((c.criticalCoverage * 100).toFixed(2)),
+              }))}
+              margin={{ left: -18, right: 8, top: 8 }}
+            >
+              <CartesianGrid stroke="var(--grid)" strokeDasharray="3 3" />
+              <XAxis dataKey="strategy" {...chartAxis} />
+              <YAxis {...chartAxis} unit="%" />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Legend wrapperStyle={{ fontSize: 11 }} />
+              <Bar dataKey="coverage" name="Risk-weighted coverage" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="critical" name="Critical-decile coverage" fill="var(--chart-2)" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Strategy</TableHead>
+                <TableHead className="text-right">Guard-band recovered</TableHead>
+                <TableHead className="text-right">Net power</TableHead>
+                <TableHead className="text-right">Speed</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {comparison.map((c) => (
+                <TableRow key={c.strategy}>
+                  <TableCell className={c.strategy === "Greedy" ? "font-medium" : undefined}>
+                    {c.strategy}
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {c.guardBandRecovered.toFixed(3)} ns
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {c.netPowerSavingPct.toFixed(2)} %
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    +{c.speedGainPct.toFixed(2)} %
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </section>
+
       {/* Placement list */}
       <section className="panel mt-6 p-5">
         <h2 className="text-lg font-semibold">Recommended placement schedule</h2>
