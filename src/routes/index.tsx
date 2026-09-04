@@ -306,16 +306,17 @@ function Dashboard() {
     background: "var(--popover)",
     border: "1px solid var(--border)",
     borderRadius: 8,
-    color: "var(--popover-foreground)",
+    color: "#F8FAFC",
     fontSize: 12,
   };
+  const tooltipItemStyle = { color: "#F8FAFC" };
+  const tooltipLabelStyle = { color: "#F8FAFC", fontWeight: 600 };
 
   return (
     <div className="mx-auto max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8">
       <header className="mb-8">
-        <div className="label-mono">Problem statement 2 · Sandisk university hackathon</div>
-        <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">
-          Distributed silicon telemetry → power-performance optimisation
+        <h1 className="text-3xl font-semibold sm:text-4xl">
+          Risk-Aware Sensor Placement for Silicon Optimisation
         </h1>
         <p className="mt-3 max-w-3xl text-muted-foreground">
           An observability-driven engine that decides <em>where</em> temperature (TDET) and process
@@ -646,7 +647,7 @@ function Dashboard() {
                 <CartesianGrid stroke="var(--grid)" strokeDasharray="3 3" />
                 <XAxis dataKey="sensors" {...chartAxis} />
                 <YAxis {...chartAxis} unit="%" />
-                <Tooltip contentStyle={tooltipStyle} />
+                <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipLabelStyle} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
                 <Area
                   type="monotone"
@@ -680,7 +681,7 @@ function Dashboard() {
                 <CartesianGrid stroke="var(--grid)" strokeDasharray="3 3" />
                 <XAxis dataKey="sensors" {...chartAxis} />
                 <YAxis {...chartAxis} unit="%" />
-                <Tooltip contentStyle={tooltipStyle} />
+                <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipLabelStyle} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
                 <Line
                   type="monotone"
@@ -725,7 +726,7 @@ function Dashboard() {
               <CartesianGrid stroke="var(--grid)" strokeDasharray="3 3" />
               <XAxis dataKey="k" {...chartAxis} />
               <YAxis {...chartAxis} />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipLabelStyle} />
               <Legend wrapperStyle={{ fontSize: 11 }} />
               <Bar dataKey="before" name="Baseline (static margin)" fill="var(--chart-4)" radius={[4, 4, 0, 0]} />
               <Bar dataKey="after" name="Sensor-informed" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
@@ -776,7 +777,7 @@ function Dashboard() {
               <XAxis dataKey="slack" name="slack" unit=" ns" {...chartAxis} />
               <YAxis dataKey="degradation" name="degradation" unit=" ps" {...chartAxis} />
               <ZAxis dataKey="obs" range={[20, 120]} />
-              <Tooltip contentStyle={tooltipStyle} cursor={{ stroke: "var(--border)" }} />
+              <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipLabelStyle} cursor={{ stroke: "var(--border)" }} />
               <Scatter data={scatter} name="paths">
                 {scatter.map((d, i) => (
                   <Cell
@@ -860,7 +861,7 @@ function Dashboard() {
               <CartesianGrid stroke="var(--grid)" strokeDasharray="3 3" />
               <XAxis dataKey="strategy" {...chartAxis} />
               <YAxis {...chartAxis} unit="%" />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipLabelStyle} />
               <Legend wrapperStyle={{ fontSize: 11 }} />
               <Bar dataKey="coverage" name="Risk-weighted coverage" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
               <Bar dataKey="critical" name="Critical-decile coverage" fill="var(--chart-2)" radius={[4, 4, 0, 0]} />
