@@ -907,6 +907,7 @@ function Dashboard() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-8" />
                 <TableHead>#</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Site (µm)</TableHead>
