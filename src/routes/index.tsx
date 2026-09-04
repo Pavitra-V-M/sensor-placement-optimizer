@@ -306,16 +306,17 @@ function Dashboard() {
     background: "var(--popover)",
     border: "1px solid var(--border)",
     borderRadius: 8,
-    color: "var(--popover-foreground)",
+    color: "#F8FAFC",
     fontSize: 12,
   };
+  const tooltipItemStyle = { color: "#F8FAFC" };
+  const tooltipLabelStyle = { color: "#F8FAFC", fontWeight: 600 };
 
   return (
     <div className="mx-auto max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8">
       <header className="mb-8">
-        <div className="label-mono">Problem statement 2 · Sandisk university hackathon</div>
-        <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">
-          Distributed silicon telemetry → power-performance optimisation
+        <h1 className="text-3xl font-semibold sm:text-4xl">
+          Risk-Aware Sensor Placement for Silicon Optimisation
         </h1>
         <p className="mt-3 max-w-3xl text-muted-foreground">
           An observability-driven engine that decides <em>where</em> temperature (TDET) and process
