@@ -647,7 +647,7 @@ function Dashboard() {
                 <CartesianGrid stroke="var(--grid)" strokeDasharray="3 3" />
                 <XAxis dataKey="sensors" {...chartAxis} />
                 <YAxis {...chartAxis} unit="%" />
-                <Tooltip contentStyle={tooltipStyle} />
+                <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipLabelStyle} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
                 <Area
                   type="monotone"
@@ -681,7 +681,7 @@ function Dashboard() {
                 <CartesianGrid stroke="var(--grid)" strokeDasharray="3 3" />
                 <XAxis dataKey="sensors" {...chartAxis} />
                 <YAxis {...chartAxis} unit="%" />
-                <Tooltip contentStyle={tooltipStyle} />
+                <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipLabelStyle} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
                 <Line
                   type="monotone"
@@ -726,7 +726,7 @@ function Dashboard() {
               <CartesianGrid stroke="var(--grid)" strokeDasharray="3 3" />
               <XAxis dataKey="k" {...chartAxis} />
               <YAxis {...chartAxis} />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipLabelStyle} />
               <Legend wrapperStyle={{ fontSize: 11 }} />
               <Bar dataKey="before" name="Baseline (static margin)" fill="var(--chart-4)" radius={[4, 4, 0, 0]} />
               <Bar dataKey="after" name="Sensor-informed" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
@@ -777,7 +777,7 @@ function Dashboard() {
               <XAxis dataKey="slack" name="slack" unit=" ns" {...chartAxis} />
               <YAxis dataKey="degradation" name="degradation" unit=" ps" {...chartAxis} />
               <ZAxis dataKey="obs" range={[20, 120]} />
-              <Tooltip contentStyle={tooltipStyle} cursor={{ stroke: "var(--border)" }} />
+              <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipLabelStyle} cursor={{ stroke: "var(--border)" }} />
               <Scatter data={scatter} name="paths">
                 {scatter.map((d, i) => (
                   <Cell
@@ -861,7 +861,7 @@ function Dashboard() {
               <CartesianGrid stroke="var(--grid)" strokeDasharray="3 3" />
               <XAxis dataKey="strategy" {...chartAxis} />
               <YAxis {...chartAxis} unit="%" />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipLabelStyle} />
               <Legend wrapperStyle={{ fontSize: 11 }} />
               <Bar dataKey="coverage" name="Risk-weighted coverage" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
               <Bar dataKey="critical" name="Critical-decile coverage" fill="var(--chart-2)" radius={[4, 4, 0, 0]} />
