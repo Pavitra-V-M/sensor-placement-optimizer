@@ -204,6 +204,14 @@ export type Field = {
   proc: number[];
 };
 
+// Realistic junction-temperature ceiling (°C) before thermal throttling.
+export const T_AMBIENT = 42;
+export const T_JMAX = 100;
+const T_MAX_RISE = T_JMAX - T_AMBIENT;
+// Calibrated so one isolated full-activity block still rises ~52 °C,
+// matching the original linear model's intent.
+const K_THERMAL = -Math.log(1 - 52 / T_MAX_RISE);
+
 export function computeField(design: Design, cols = 40, rows = 28): Field {
   const cellW = design.width / cols;
   const cellH = design.height / rows;
@@ -214,7 +222,7 @@ export function computeField(design: Design, cols = 40, rows = 28): Field {
     for (let c = 0; c < cols; c++) {
       const px = (c + 0.5) * cellW;
       const py = (r + 0.5) * cellH;
-      let t = 42; // ambient junction floor
+      let thermalDrive = 0;
       let p = 0;
       let pw = 0;
       for (const b of design.blocks) {
@@ -223,13 +231,16 @@ export function computeField(design: Design, cols = 40, rows = 28): Field {
         const d = Math.hypot(px - bx, py - by);
         const sigma = Math.max(b.w, b.h) * 0.85;
         const g = Math.exp(-(d * d) / (2 * sigma * sigma));
-        t += 52 * b.activity * g;
+        thermalDrive += b.activity * g;
         p += b.processSkew * g;
         pw += g;
       }
+      // Saturating exponential combination — bounded, physically plausible
+      // ceiling, then a hard clamp as safety backstop (like throttling).
+      const t = T_AMBIENT + T_MAX_RISE * (1 - Math.exp(-K_THERMAL * thermalDrive));
       // Global process gradient across the die (systematic within-die variation).
       const grad = (px / design.width - 0.5) * 0.6 + (py / design.height - 0.5) * 0.25;
-      temp[r * cols + c] = t;
+      temp[r * cols + c] = Math.min(t, T_JMAX + 0.5);
       proc[r * cols + c] = Math.max(-1, Math.min(1, (pw ? p / pw : 0) * 0.7 + grad));
     }
   }
