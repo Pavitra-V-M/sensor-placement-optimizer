@@ -34,7 +34,7 @@ const stages = [
     n: "02",
     title: "Thermal & process field reconstruction",
     body: "Per-block switching activity is diffused across the die with a Gaussian kernel, then composed through a saturating exponential so junction temperature asymptotes to a hard ceiling rather than growing without bound. A systematic within-die gradient is superposed on per-block corner skew to build the process map.",
-    formula: "T(x) = 42 + 58·[1 − exp(−K_T · Σ_b act_b·exp(−d²/2σ_b²))],  K_T = −ln(1 − 52/58) ≈ 2.565",
+    formula: "T(x) = 42 + 58·[1 − exp(−K_T · Σ_b act_b·exp(−d²/2σ_b²))],  K_T = −ln(1 − 52/58) ≈ 2.269",
   },
   {
     n: "03",
