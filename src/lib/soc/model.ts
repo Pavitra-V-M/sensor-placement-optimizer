@@ -111,10 +111,24 @@ export function generateDesign(opts: GenOptions): Design {
 
   const cols = 3;
   const rows = 3;
-  const blocks: Block[] = BLOCK_LIBRARY.map((bRaw, i) => {
-    const b = bRaw!;
-    const cx = i % cols;
-    const cy = Math.floor(i / cols);
+  // Thermally-aware placement: hottest blocks go to the cells with the
+  // fewest neighbours (corners first, then edges, centre last) to
+  // maximise minimum spatial coupling — same principle as the greedy
+  // max-coverage sensor placement.
+  const DISPERSAL_ORDER: [number, number][] = [
+    [0, 0],
+    [2, 0],
+    [0, 2],
+    [2, 2],
+    [1, 0],
+    [0, 1],
+    [2, 1],
+    [1, 2],
+    [1, 1],
+  ];
+  const sortedLibrary = [...BLOCK_LIBRARY].sort((a, b) => b.activity - a.activity);
+  const blocks: Block[] = sortedLibrary.map((b, i) => {
+    const [cx, cy] = DISPERSAL_ORDER[i % DISPERSAL_ORDER.length]!;
     const cw = width / cols;
     const ch = height / rows;
     const pad = 18;
