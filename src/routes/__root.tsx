@@ -130,7 +130,6 @@ function SiteNav() {
   const links = [
     { to: "/", label: "Dashboard" },
     { to: "/method", label: "Methodology" },
-    { to: "/brief", label: "Brief" },
   ] as const;
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur">
